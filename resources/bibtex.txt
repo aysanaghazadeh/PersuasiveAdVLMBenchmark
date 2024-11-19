@@ -1,6 +1,6 @@
-@inproceedings{author20XXtitle,
-  title={Please cite me},
-  author={Author, First and Author, Second and Author, Third},
-  booktitle={Conference},
-  year={20XX}
+@article{malakouti2024benchmarking,
+  title={Benchmarking VLMs' Reasoning About Persuasive Atypical Images},
+  author={Malakouti, Sina and Aghazadeh, Aysan and Khandelwal, Ashmit and Kovashka, Adriana},
+  journal={arXiv preprint arXiv:2409.10719},
+  year={2024}
 }
