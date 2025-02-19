@@ -4,21 +4,12 @@ import torch
 import pandas as pd
 from PIL import Image
 import os
-from VLMs.InternVL2 import InternVL
+from VLMs.VLM import VLM
 
 
 class ActionReasonVLM:
     def __init__(self, args):
-
-        quantization_config = BitsAndBytesConfig(
-            load_in_8bit=True,
-            bnb_8bit_compute_dtype=torch.float16
-        )
-        if args.VLM == 'LLAVA':
-            self.pipe = pipeline("image-to-text", model='llava-hf/llava-1.5-13b-hf',
-                                 model_kwargs={"quantization_config": quantization_config})
-        if args.VLM == 'InternVL':
-            self.pipe = InternVL(args)
+        self.pipe = VLM(args)
         self.descriptions = None
         self.args = args
         self.QAs = json.load(open(os.path.join(self.args.data_path, self.args.test_set_QA)))
@@ -30,25 +21,33 @@ class ActionReasonVLM:
 
     @staticmethod
     def get_answer_format():
-        answer_format = """
-        Answer: ${indices of three best options}\n
-        """
+        # answer_format = """
+        # Answer: ${indices of three best options}\n
+        # """
+        env = Environment(loader=FileSystemLoader(args.prompt_path))
+        template = env.get_template(args.format_prompt)
+        answer_format = template.render()
         return answer_format
 
     @staticmethod
     def get_prompt(options, answer_format, description):
-
-        prompt = (f"USER:<image>\n"
-         f"Question: What are the indices of the 3 best interpretations in ranked form among the options for this image? Separate them by comma.\n"
-         f"Options: {options}\n"
-         f"your answer must only follow the format of {answer_format} not any other format.\n"
-         f"Do not return include any explanation, only the indices of the three best options separated by comma."
-         f"Assistant: ")
+        # prompt = (f"USER:<image>\n"
+        #  f"Question: What are the indices of the 3 best interpretations in ranked form among the options for this image? Separate them by comma.\n"
+        #  f"Options: {options}\n"
+        #  f"your answer must only follow the format of {answer_format} not any other format.\n"
+        #  f"Do not return include any explanation, only the indices of the three best options separated by comma."
+        #  f"Assistant: ")
+        data = {'options': options,
+                'answer_format': answer_format,
+                'description': description}
+        env = Environment(loader=FileSystemLoader(args.prompt_path))
+        template = env.get_template(args.VLM_prompt)
+        prompt = template.render(**data)
         return prompt
 
     def set_descriptions(self):
         if self.args.description_file is not None:
-            self.descriptions = pd.read_csv(os.path.join(self.args.data_path, 'train', self.args.description_file))
+            self.descriptions = pd.read_csv(self.args.description_file)
 
     def get_description(self, image_url):
         description = self.descriptions.loc[self.descriptions['ID'] == image_url].iloc[0]['description']
@@ -61,10 +60,10 @@ class ActionReasonVLM:
 
     def get_predictions(self, image_url):
         options = self.QAs[image_url][1]
-        options = self.parse_options(options)
+        options_formatted = self.parse_options(options)
         description = self.get_description(image_url)
         answer_format = self.get_answer_format()
-        prompt = self.get_prompt(options, answer_format, description)
+        prompt = self.get_prompt(options_formatted, answer_format, description)
         image = self.get_image(image_url)
         output = self.pipe(image, prompt=prompt, generate_kwargs={"max_new_tokens": 45})
         if self.args.VLM == 'LLAVA':

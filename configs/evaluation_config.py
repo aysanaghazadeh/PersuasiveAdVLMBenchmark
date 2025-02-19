@@ -35,30 +35,20 @@ def parse_args():
                         required=True,
                         help='Choose among ARGS for commandline arguments, DEFAULT for default values, or YAML for '
                              'config file')
-    parser.add_argument('--task',
-                        type=str,
-                        default='PittAd',
-                        help='Choose between PittAd, whoops')
-    parser.add_argument('--description_type',
-                        type=str,
-                        default='IN',
-                        help='Choose among IN, UH, combine')
-    parser.add_argument('--model_path',
-                        type=str,
-                        default='../models')
-    parser.add_argument('--VLM_prompt',
-                        type=str,
-                        default='IN_description_generation.jinja')
     parser.add_argument('--config_path',
                         type=str,
                         default=None,
                         help='The path to the config file if config_type is YAML')
-    parser.add_argument('--description_file',
+    parser.add_argument('--task',
                         type=str,
-                        default='concat_simple_llava_description.csv')
-    parser.add_argument('--evaluation_type',
+                        default='PittAd',
+                        choices=['whoops', 'PittAd'],
+                        help='Choose between PittAd, whoops')
+    parser.add_argument('--description_type',
                         type=str,
-                        default='action_reason_llava')
+                        default=None,
+                        choices=['combine', 'IN', 'UH', 'V', 'T'],
+                        help='Choose among IN, UH, combine')
     parser.add_argument('--result_path',
                         type=str,
                         default='../experiments/results',
@@ -67,58 +57,36 @@ def parse_args():
                         type=str,
                         default=None,
                         help='the file path relative to the result_path')
-    parser.add_argument('--text_input_type',
-                        type=str,
-                        default='LLM')
-    parser.add_argument('--with_audience',
-                        type=bool,
-                        default=False)
-    parser.add_argument('--with_sentiment',
-                        type=bool,
-                        default=False)
-    parser.add_argument('--with_topics',
-                        type=bool,
-                        default=False)
-    parser.add_argument('--LLM',
-                        type=str,
-                        default='LLAMA3')
-    parser.add_argument('--train',
-                        type=bool,
-                        default=False)
-    parser.add_argument('--fine_tuned',
-                        type=bool,
-                        default=False)
-    parser.add_argument('--image_generation',
-                        type=bool,
-                        default=False)
-    parser.add_argument('--T2I_model',
-                        type=str,
-                        default='PixArt')
     parser.add_argument('--prompt_path',
                         type=str,
                         default='util/prompt_engineering/prompts',
                         help='Path to the folder of prompts. Set the name of prompt files as: {text_input_type}.jinja')
-    parser.add_argument('--llm_prompt',
+    parser.add_argument('--VLM_prompt',
                         type=str,
-                        default='product_detector.jinja',
-                        help='LLM input prompt template file name.')
-    parser.add_argument('--T2I_prompt',
+                        default=None)
+    parser.add_argument('--LLM_prompt',
                         type=str,
-                        default='product_image_generation.jinja',
-                        help='T2I input prompt template file name.')
+                        default=None)
+    parser.add_argument('--format_prompt',
+                        type=str,
+                        default=None)
+    parser.add_argument('--description_file',
+                        type=str,
+                        default='concat_simple_llava_description.csv')
+    parser.add_argument('--evaluation_type',
+                        type=str,
+                        default='action_reason_llava')
+    parser.add_argument('--LLM',
+                        type=str,
+                        default=None)
+    parser.add_argument('--VLM',
+                        type=str,
+                        default=None)
     parser.add_argument('--data_path',
                         type=str,
                         default='../Data/PittAd',
                         help='Path to the root of the data'
                         )
-    parser.add_argument('--product_images',
-                        type=str,
-                        default='product_images',
-                        help='path to the typical images for the advertised product in each advertisement'
-                        )
-    parser.add_argument('--text_alignment_file',
-                        type=str,
-                        default=None)
     parser.add_argument('--train_set_QA',
                         type=str,
                         default='train/QA_Combined_Action_Reason_train.json',
@@ -136,9 +104,6 @@ def parse_args():
                         type=str,
                         default='train_images_total',
                         help='Relative path to the original images for the test set from root')
-    parser.add_argument('--VLM',
-                        type=str,
-                        default='VILA')
     parser.add_argument('--top_k',
                         type=int,
                         default=1)

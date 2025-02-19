@@ -19,7 +19,7 @@ import itertools
 from LLMs.LLM import LLM
 from FlagEmbedding import BGEM3FlagModel
 
-api_key = "edit this"
+api_key = "edit_this"
 
 
 # Function to convert an image file to a tensor
