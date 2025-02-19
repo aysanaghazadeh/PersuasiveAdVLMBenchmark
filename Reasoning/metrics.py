@@ -4,20 +4,9 @@ from transformers import CLIPProcessor, CLIPModel
 from transformers import AutoModelForCausalLM, AutoTokenizer, AutoModel
 from PIL import Image
 import torch
-from torch import nn
 from torchvision.transforms import functional as TF
-from pytorch_fid.fid_score import calculate_fid_given_paths
 import os
-import tempfile
 from transformers import pipeline, BitsAndBytesConfig
-import re
-import base64
-import requests
-from VLMs.InternVL2 import InternVL
-from VLMs.multi_image_InternVL import MultiInternVL
-import itertools
-from LLMs.LLM import LLM
-from FlagEmbedding import BGEM3FlagModel
 
 api_key = "edit_this"
 
@@ -86,7 +75,6 @@ class Whoops:
             question = None
         prompt = self.get_prompt(options, question, description)
         output = self.pipe(image, prompt=prompt, generate_kwargs={"max_new_tokens": 45})
-        output = output[0]["generated_text"].split(':')[-1]
         print(output)
         predictions = [''.join(i for i in prediction if i.isdigit()) for prediction in output.split(',')]
         for prediction in predictions:
@@ -97,5 +85,4 @@ class Whoops:
             if len(options) > ind:
                 predictions.add(options[ind])
         answers = list(predictions)
-        return answers
         return answers

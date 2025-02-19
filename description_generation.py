@@ -1,13 +1,10 @@
 import json
 from jinja2 import Environment, FileSystemLoader
-from transformers import pipeline
-from util.data.trian_test_split import get_test_data, get_train_data
 from PIL import Image
 import os
 import csv
 import pandas as pd
-from configs.inference_config import get_args
-from util.prompt_engineering.prompt_generation import PromptGenerator
+from configs.evaluation_config import get_args
 from LLMs.LLM import LLM
 from VLMs.VLM import VLM
 
@@ -19,12 +16,6 @@ def get_model(args):
     else:
         pipe = VLM(args)
         return pipe
-
-
-def get_llm(args):
-    model = PromptGenerator(args)
-    model.set_LLM(args)
-    return model
 
 
 def get_single_description(args, image_url, pipe):

@@ -49,6 +49,7 @@ def parse_args():
                         default=None,
                         choices=['combine', 'IN', 'UH', 'V', 'T'],
                         help='Choose among IN, UH, combine')
+    # results
     parser.add_argument('--result_path',
                         type=str,
                         default='../experiments/results',
@@ -57,6 +58,7 @@ def parse_args():
                         type=str,
                         default=None,
                         help='the file path relative to the result_path')
+    #prompts
     parser.add_argument('--prompt_path',
                         type=str,
                         default='util/prompt_engineering/prompts',
@@ -72,16 +74,15 @@ def parse_args():
                         default=None)
     parser.add_argument('--description_file',
                         type=str,
-                        default='concat_simple_llava_description.csv')
-    parser.add_argument('--evaluation_type',
-                        type=str,
-                        default='action_reason_llava')
+                        default=None)
+    #models
     parser.add_argument('--LLM',
                         type=str,
                         default=None)
     parser.add_argument('--VLM',
                         type=str,
                         default=None)
+    #data
     parser.add_argument('--data_path',
                         type=str,
                         default='../Data/PittAd',

@@ -3,7 +3,7 @@ import pandas as pd
 from collections import Counter
 import requests
 from configs.evaluation_config import get_args
-from Reasoning.ARR import ActionReasonVLM
+from Reasoning.retrieval import ActionReasonVLM
 import csv
 from util.data.trian_test_split import get_test_data
 from LLMs.LLM import LLM
