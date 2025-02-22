@@ -2,6 +2,7 @@ from torch import nn
 from VLMs.LLAVA import LLAVA
 from VLMs.InternVL2 import InternVL
 from VLMs.LLAVA16 import LLAVA16
+from VLMs.InstructBLIP import InstructBLIP
 
 
 class VLM(nn.Module):
@@ -10,7 +11,8 @@ class VLM(nn.Module):
         model_map = {
             'LLAVA': LLAVA,
             'LLAVA16': LLAVA16,
-            'InternVL': InternVL
+            'InternVL': InternVL,
+            'InstructBLIP': InstructBLIP
         }
         self.model = model_map[args.VLM](args)
 

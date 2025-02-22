@@ -29,7 +29,8 @@ def set_conf(config_file):
 
 def parse_args():
     """ Parsing the Arguments for the Advertisement Generation Project"""
-    parser = argparse.ArgumentParser(description="Configuration arguments for advertisement generation:")
+    parser = argparse.ArgumentParser(description="Configuration arguments for Persuasive Ad VLM Benchmark:")
+    #config
     parser.add_argument('--config_type',
                         type=str,
                         required=True,
@@ -39,50 +40,17 @@ def parse_args():
                         type=str,
                         default=None,
                         help='The path to the config file if config_type is YAML')
+    # task
     parser.add_argument('--task',
                         type=str,
                         default='PittAd',
                         choices=['whoops', 'PittAd'],
                         help='Choose between PittAd, whoops')
-    parser.add_argument('--description_type',
-                        type=str,
-                        default=None,
-                        choices=['combine', 'IN', 'UH', 'V', 'T'],
-                        help='Choose among IN, UH, combine')
-    # results
-    parser.add_argument('--result_path',
-                        type=str,
-                        default='../experiments/results',
-                        help='The path to the folder for saving the results')
-    parser.add_argument('--result_file',
-                        type=str,
-                        default=None,
-                        help='the file path relative to the result_path')
-    #prompts
-    parser.add_argument('--prompt_path',
-                        type=str,
-                        default='util/prompt_engineering/prompts',
-                        help='Path to the folder of prompts. Set the name of prompt files as: {text_input_type}.jinja')
-    parser.add_argument('--VLM_prompt',
-                        type=str,
-                        default=None)
-    parser.add_argument('--LLM_prompt',
-                        type=str,
-                        default=None)
-    parser.add_argument('--format_prompt',
-                        type=str,
-                        default=None)
-    parser.add_argument('--description_file',
-                        type=str,
-                        default=None)
-    #models
-    parser.add_argument('--LLM',
-                        type=str,
-                        default=None)
-    parser.add_argument('--VLM',
-                        type=str,
-                        default=None)
-    #data
+    parser.add_argument('--top_k',
+                        type=int,
+                        default=3,
+                        help='if multi-selection select the k, if single select 1')
+    # data
     parser.add_argument('--data_path',
                         type=str,
                         default='../Data/PittAd',
@@ -105,9 +73,56 @@ def parse_args():
                         type=str,
                         default='train_images_total',
                         help='Relative path to the original images for the test set from root')
-    parser.add_argument('--top_k',
-                        type=int,
-                        default=1)
+    # context
+    parser.add_argument('--description_type',
+                        type=str,
+                        default=None,
+                        choices=['combine', 'IN', 'UH', 'V', 'T'],
+                        help='Choose among IN, UH, combine')
+    parser.add_argument('--description_file',
+                        type=str,
+                        default=None)
+    parser.add_argument('--with_atypicality',
+                        action="store_true",
+                        default=None)
+    parser.add_argument('--atypicality_file',
+                        type=str,
+                        default=None)
+    # models
+    parser.add_argument('--method',
+                        type=str,
+                        choices=['LLM', 'VLM'],
+                        default=None)
+    parser.add_argument('--LLM',
+                        type=str,
+                        default=None)
+    parser.add_argument('--VLM',
+                        type=str,
+                        default=None)
+    # prompts
+    parser.add_argument('--prompt_path',
+                        type=str,
+                        default='util/prompt_engineering/prompts',
+                        help='Path to the folder of prompts. Set the name of prompt files as: {text_input_type}.jinja')
+    parser.add_argument('--VLM_prompt',
+                        type=str,
+                        default=None)
+    parser.add_argument('--LLM_prompt',
+                        type=str,
+                        default=None)
+    parser.add_argument('--format_prompt',
+                        type=str,
+                        default=None)
+    # results
+    parser.add_argument('--result_path',
+                        type=str,
+                        default='../experiments/results',
+                        help='The path to the folder for saving the results')
+    parser.add_argument('--result_file',
+                        type=str,
+                        default=None,
+                        help='the file path relative to the result_path')
+
     return parser.parse_args()
 
 

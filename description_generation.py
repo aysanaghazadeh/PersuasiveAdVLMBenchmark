@@ -10,7 +10,7 @@ from VLMs.VLM import VLM
 
 
 def get_model(args):
-    if args.description_type == 'combine':
+    if args.description_type in ['combine', 'atypicality']:
         pipe = LLM(args)
         return pipe
     else:
@@ -56,6 +56,10 @@ def get_combine_description(args, image_url, pipe):
     return description
 
 
+def get_atypicality(args, image_url, pipe):
+
+
+
 def get_descriptions(args):
     if args.task == 'whoops':
         images = [f'{i}.png' for i in range(500)]
@@ -64,11 +68,17 @@ def get_descriptions(args):
 
     print(f'number of images in the set: {len(images)}')
     print('*' * 100)
-
-    description_file = os.path.join(args.result_path,
-                                    f'{args.description_type}'
-                                    f'_{args.VLM}'
-                                    f'_description_{args.task}.csv')
+    if args.description_type == 'atypicality':
+        description_file = os.path.join(args.result_path,
+                                        f'{args.description_type}'
+                                        f'_{args.LLM}'
+                                        f'_{args.description_file.split("/")[-1].split("_")[0]}'
+                                        f'_description.csv')
+    else:
+        description_file = os.path.join(args.result_path,
+                                        f'{args.description_type}'
+                                        f'_{args.VLM}'
+                                        f'_description_{args.task}.csv')
 
     if os.path.exists(description_file):
         print(description_file)
@@ -85,6 +95,8 @@ def get_descriptions(args):
         processed_images.add(image_url)
         if args.description_type == 'combine':
             description = get_combine_description(args, image_url, pipe)
+        elif args.description_type == 'atypicality':
+            description = get_atypicality(args, image_url, pipe)
         else:
             description = get_single_description(args, image_url, pipe)
         print(f'output of image {image_url} is {description}')
