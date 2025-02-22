@@ -57,7 +57,7 @@ def get_combine_description(args, image_url, pipe):
 
 
 def get_atypicality(args, image_url, pipe):
-
+    pass
 
 
 def get_descriptions(args):
