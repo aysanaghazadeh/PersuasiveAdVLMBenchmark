@@ -82,6 +82,9 @@ def parse_args():
     parser.add_argument('--description_file',
                         type=str,
                         default=None)
+    parser.add_argument('--object_file',
+                        type=str,
+                        default=None)
     parser.add_argument('--with_atypicality',
                         action="store_true",
                         default=None)

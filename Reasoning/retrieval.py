@@ -70,7 +70,10 @@ class Retrieval:
         atypicality = self.get_atypicality(image_url) if self.args.with_atypicality else None
         prompt = self.get_prompt(options_formatted, answer_format, description, atypicality)
         image = self.get_image(image_url)
-        output = self.pipe(image, prompt=prompt, generate_kwargs={"max_new_tokens": 45})
+        if self.args.method == 'VLM':
+            output = self.pipe(image, prompt=prompt, generate_kwargs={"max_new_tokens": 45})
+        else:
+            output = self.pipe(image, prompt=prompt, generate_kwargs={"max_new_tokens": 45})
         options = self.QAs[image_url][1]
         predictions = output.split(',')
         answers = []
