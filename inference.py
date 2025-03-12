@@ -250,6 +250,5 @@ class Reasoning:
 
 if __name__ == '__main__':
     args = get_args()
-    # metrics = Metrics(args)
     reasoning = Reasoning(args)
     reasoning.reason(args)
